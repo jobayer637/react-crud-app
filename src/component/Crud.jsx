@@ -48,7 +48,7 @@ export class Crud extends Component {
                 randomColor: {r,g,b},
                 randomBorder: br[brdr]
             })
-        },5000)
+        },4*1000)
     }
 
     handleInput = (event) => {
