@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { demoEmployee } from './Employee'
 import ManageForm from './ManageForm'
 import {
-    Table, Button, ButtonGroup, Card, Modal
+    Table, Button, ButtonGroup, Card, Modal, Badge
 } from 'react-bootstrap'
 import Toaster from './Toaster'
 
@@ -24,13 +24,27 @@ export class Crud extends Component {
             type: '',
             message: ''
         },
-        isUpdate: false
+        isUpdate: false,
+        randomColor: {
+            r: '10', g: '100', b: '200'
+        }
     }
 
     componentDidMount = () => {
         this.setState({
             employee: demoEmployee
         })
+
+        setInterval(() => {
+            let r = Math.floor(Math.random() * 255) + 1;
+            let g = Math.floor(Math.random() * 255) + 1;
+            let b = Math.floor(Math.random() * 255) + 1;
+            this.setState({
+                randomColor: {r,g,b}
+            })
+        },5000)
+
+        console.log('hello')
     }
 
     handleInput = (event) => {
@@ -133,8 +147,12 @@ export class Crud extends Component {
     }
 
     render() {
+        const {r, g, b} = this.state.randomColor
         return (
             <div>
+                <div className="card my-2" style={{backgroundColor: `rgb(${r},${b},${g},0.3)`, border: `2px dashed rgb(${g},${r},${b},1)`}}>
+                    <div className="card-header"><h1>React CRUD Applicatioin</h1></div>
+                </div>
                 {this.state.success
                     ? <Toaster
                         show={this.state.toaster.show}
@@ -143,14 +161,14 @@ export class Crud extends Component {
                         handleToaster={this.handleToaster}
                     />
                     : ''}
-                <Card>
+                <Card style={{backgroundColor: `rgb(${r},${g},${b},0.3)`, border: `2px dashed rgb(${b},${r},${g},1)`}}>
                     <Card.Header>
                         <div className="d-flex justify-content-between">
                             <div>
                                 <h3>All Employees</h3>
                             </div>
                             <div>
-                                <Button onClick={this.handleModal} className="rounded-0 btn-secondary">Add New Employee</Button>
+                                <Button onClick={this.handleModal} className="rounded-0 btn-warning"><i class="fas fa-plus-circle"></i> Add New Employee</Button>
                             </div>
                         </div>
                     </Card.Header>
@@ -174,8 +192,8 @@ export class Crud extends Component {
                                         <td>{emp.age}</td>
                                         <td>
                                             <ButtonGroup className="">
-                                                <Button onClick={() => this.handleEdit(emp.id)} variant="warning">Edit</Button>
-                                                <Button onClick={() => this.handleDelete(emp.id)} variant="danger">Delete</Button>
+                                                <Button onClick={() => this.handleEdit(emp.id)} variant="warning"><i class="fas fa-edit"></i></Button>
+                                                <Button onClick={() => this.handleDelete(emp.id)} variant="danger"><i class="fas fa-trash"></i></Button>
                                             </ButtonGroup>
                                             <br />
                                         </td>
