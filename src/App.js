@@ -4,7 +4,7 @@ import Crud from './component/Crud';
 
 function App() {
   return (
-    <div className="container my-4 App">
+    <div className="container my-4">
         <Crud />
     </div>
   );

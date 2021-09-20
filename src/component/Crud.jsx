@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { demoEmployee } from './Employee'
 import ManageForm from './ManageForm'
 import {
-    Table, Button, ButtonGroup, Card, Modal, Badge
+    Table, Button, ButtonGroup, Card, Modal, Row, Col
 } from 'react-bootstrap'
 import Toaster from './Toaster'
 
@@ -28,8 +28,9 @@ export class Crud extends Component {
         randomColor: {
             r: '10', g: '100', b: '200'
         },
-        randomBorder: ''
-        
+        randomBorder: '',
+        search: ''
+
     }
 
     componentDidMount = () => {
@@ -42,13 +43,13 @@ export class Crud extends Component {
             let g = Math.floor(Math.random() * 255) + 1;
             let b = Math.floor(Math.random() * 255) + 1;
 
-            const br = ['dotted','dashed','solid','dotted','dotted','dashed','solid','dashed','solid']
+            const br = ['dotted', 'dashed', 'solid', 'dotted', 'dotted', 'dashed', 'solid', 'dashed', 'solid']
             let brdr = Math.floor(Math.random() * 9) + 1;
             this.setState({
-                randomColor: {r,g,b},
+                randomColor: { r, g, b },
                 randomBorder: br[brdr]
             })
-        },4*1000)
+        }, 4 * 1000)
     }
 
     handleInput = (event) => {
@@ -150,11 +151,15 @@ export class Crud extends Component {
         })
     }
 
+    handleSearch = (event) => {
+        this.setState({search: event.target.value})
+    }
+
     render() {
-        const {r, g, b} = this.state.randomColor
+        const { r, g, b } = this.state.randomColor
         return (
             <div>
-                <div className="card my-2" style={{backgroundColor: `rgb(${r},${b},${g},0.3)`, border: `2px ${this.state.randomBorder} rgb(${g},${r},${b},1)`}}>
+                <div className="card my-2" style={{ backgroundColor: `rgb(${r},${b},${g},0.3)`, border: `2px ${this.state.randomBorder} rgb(${g},${r},${b},1)` }}>
                     <div className="card-header"><h1>React CRUD Applicatioin</h1></div>
                 </div>
                 {this.state.success
@@ -165,16 +170,23 @@ export class Crud extends Component {
                         handleToaster={this.handleToaster}
                     />
                     : ''}
-                <Card style={{backgroundColor: `rgb(${r},${g},${b},0.3)`, border: `2px ${this.state.randomBorder} rgb(${b},${r},${g},1)`}}>
+                <Card style={{ backgroundColor: `rgb(${r},${g},${b},0.3)`, border: `2px ${this.state.randomBorder} rgb(${b},${r},${g},1)` }}>
                     <Card.Header>
-                        <div className="d-flex justify-content-between">
-                            <div>
+                        <Row>
+                            <Col md="5">
                                 <h3>All Employees</h3>
-                            </div>
-                            <div>
-                                <Button onClick={this.handleModal} className="rounded-0 btn-warning"><i class="fas fa-plus-circle"></i> Add New Employee</Button>
-                            </div>
-                        </div>
+                            </Col>
+                            <Col>
+                                <Row>
+                                    <Col>
+                                        <input onChange={this.handleSearch} type="text" className="form-control" placeholder="Search Employee"/>
+                                    </Col>
+                                    <Col>
+                                        <Button onClick={this.handleModal} className="rounded-0 btn-warning"><i class="fas fa-plus-circle"></i> Add New Employee</Button>
+                                    </Col>
+                                </Row>
+                            </Col>
+                        </Row>
                     </Card.Header>
                     <Card.Body>
                         <Table striped bordered hover>
@@ -188,7 +200,16 @@ export class Crud extends Component {
                                 </tr>
                             </thead>
                             <tbody>
-                                {this.state.employee.map(emp =>
+
+                                {this.state.employee.filter(emp => {
+                                    if(this.state.search === '' || this.state.search === null)
+                                        return emp
+                                    if(emp.name.toLowerCase().includes(this.state.search.toLowerCase()) ||
+                                        emp.id.toString().includes(this.state.search) ||
+                                        emp.age.includes(this.state.search) || 
+                                        emp.salary.includes(this.state.search))
+                                        return emp
+                                }).map(emp =>
                                     <tr key={emp.id}>
                                         <td>{emp.id}</td>
                                         <td>{emp.name}</td>
