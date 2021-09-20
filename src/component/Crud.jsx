@@ -27,7 +27,9 @@ export class Crud extends Component {
         isUpdate: false,
         randomColor: {
             r: '10', g: '100', b: '200'
-        }
+        },
+        randomBorder: ''
+        
     }
 
     componentDidMount = () => {
@@ -39,12 +41,14 @@ export class Crud extends Component {
             let r = Math.floor(Math.random() * 255) + 1;
             let g = Math.floor(Math.random() * 255) + 1;
             let b = Math.floor(Math.random() * 255) + 1;
+
+            const br = ['dotted','dashed','solid','dotted','dotted','dashed','solid','dashed','solid']
+            let brdr = Math.floor(Math.random() * 9) + 1;
             this.setState({
-                randomColor: {r,g,b}
+                randomColor: {r,g,b},
+                randomBorder: br[brdr]
             })
         },5000)
-
-        console.log('hello')
     }
 
     handleInput = (event) => {
@@ -150,7 +154,7 @@ export class Crud extends Component {
         const {r, g, b} = this.state.randomColor
         return (
             <div>
-                <div className="card my-2" style={{backgroundColor: `rgb(${r},${b},${g},0.3)`, border: `2px dashed rgb(${g},${r},${b},1)`}}>
+                <div className="card my-2" style={{backgroundColor: `rgb(${r},${b},${g},0.3)`, border: `2px ${this.state.randomBorder} rgb(${g},${r},${b},1)`}}>
                     <div className="card-header"><h1>React CRUD Applicatioin</h1></div>
                 </div>
                 {this.state.success
@@ -161,7 +165,7 @@ export class Crud extends Component {
                         handleToaster={this.handleToaster}
                     />
                     : ''}
-                <Card style={{backgroundColor: `rgb(${r},${g},${b},0.3)`, border: `2px dashed rgb(${b},${r},${g},1)`}}>
+                <Card style={{backgroundColor: `rgb(${r},${g},${b},0.3)`, border: `2px ${this.state.randomBorder} rgb(${b},${r},${g},1)`}}>
                     <Card.Header>
                         <div className="d-flex justify-content-between">
                             <div>
