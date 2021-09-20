@@ -10,10 +10,10 @@ export class Crud extends Component {
     state = {
         employee: [],
         newEmp: {
-            id: '' , name: '', salary: '', age: ''
+            id: '', name: '', salary: '', age: ''
         },
         editEmp: {
-            id: '' , name: '', salary: '', age: ''
+            id: '', name: '', salary: '', age: ''
         },
         addEmpModal: {
             show: false
@@ -34,23 +34,23 @@ export class Crud extends Component {
     }
 
     handleInput = (event) => {
-       if (this.state.isUpdate) {
+        if (this.state.isUpdate) {
             this.setState({
-                editEmp: {...this.state.editEmp, [event.target.name]: event.target.value}
+                editEmp: { ...this.state.editEmp, [event.target.name]: event.target.value }
             })
-       } else {
+        } else {
             this.setState({
-                newEmp: {...this.state.newEmp, [event.target.name]: event.target.value}
+                newEmp: { ...this.state.newEmp, [event.target.name]: event.target.value }
             })
-       }
+        }
     }
 
     handleForm = (event) => {
         event.preventDefault()
-        this.state.newEmp.id=this.state.employee.length + 1
+        this.state.newEmp.id = this.state.employee.length + 1
 
         if (this.state.isUpdate) {
-            const {id, name, salary, age} = this.state.editEmp
+            const { id, name, salary, age } = this.state.editEmp
             let employee = this.state.employee
             let findEmp = employee.find(emp => emp.id === id)
             findEmp.name = name
@@ -65,17 +65,17 @@ export class Crud extends Component {
                     type: 'Success',
                     message: 'Successfully Updated'
                 },
-                addEmpModal: {show: false},
-                newEmp: {id: '', name: '', salary: '', age: ''},
-                editEmp: {id: '', name: '', salary: '', age: ''}
+                addEmpModal: { show: false },
+                newEmp: { id: '', name: '', salary: '', age: '' },
+                editEmp: { id: '', name: '', salary: '', age: '' }
             }, () => {
-                setTimeout( () => {
+                setTimeout(() => {
                     this.setState({
-                        toaster: {show: false}
+                        toaster: { show: false }
                     })
-                },4000)
+                }, 4000)
             })
-       } else {
+        } else {
             this.setState({
                 employee: [...this.state.employee, this.state.newEmp],
                 toaster: {
@@ -83,18 +83,17 @@ export class Crud extends Component {
                     type: 'Success',
                     message: 'New Employee Successfully Added'
                 },
-                addEmpModal: {show: false},
-                newEmp: {id: '', name: '', salary: '', age: ''}
+                addEmpModal: { show: false },
+                newEmp: { id: '', name: '', salary: '', age: '' }
             }, () => {
-                setTimeout( () => {
+                setTimeout(() => {
                     this.setState({
-                        toaster: {show: false}
+                        toaster: { show: false }
                     })
-                },4000)
+                }, 4000)
             })
-       }
+        }
 
-        
     }
 
     handleDelete = (id) => {
@@ -103,13 +102,13 @@ export class Crud extends Component {
             this.setState({
                 employee: this.state.employee.filter(emp => emp.id != id)
             })
-        } 
+        }
     }
 
     handleModal = () => {
         this.setState({
             isUpdate: false,
-            editEmp: {id: '', name: '', salary: '', age: ''},
+            editEmp: { id: '', name: '', salary: '', age: '' },
             addEmpModal: {
                 show: !this.state.addEmpModal.show
             }
@@ -129,7 +128,7 @@ export class Crud extends Component {
 
     handleToaster = () => {
         this.setState({
-            toaster: {show: false}
+            toaster: { show: false }
         })
     }
 
@@ -137,13 +136,13 @@ export class Crud extends Component {
         return (
             <div>
                 {this.state.success
-                ? <Toaster 
-                    show={this.state.toaster.show}
-                    type={this.state.toaster.type}
-                    message={this.state.toaster.message}
-                    handleToaster={this.handleToaster}
-                />
-                : ''}
+                    ? <Toaster
+                        show={this.state.toaster.show}
+                        type={this.state.toaster.type}
+                        message={this.state.toaster.message}
+                        handleToaster={this.handleToaster}
+                    />
+                    : ''}
                 <Card>
                     <Card.Header>
                         <div className="d-flex justify-content-between">
@@ -168,7 +167,7 @@ export class Crud extends Component {
                             </thead>
                             <tbody>
                                 {this.state.employee.map(emp =>
-                                    <tr  key={emp.id}>
+                                    <tr key={emp.id}>
                                         <td>{emp.id}</td>
                                         <td>{emp.name}</td>
                                         <td>{emp.salary}</td>
@@ -186,31 +185,31 @@ export class Crud extends Component {
                     </Card.Body>
                 </Card>
 
-                {/* Add New employee Modal */}
+                {/* Add New and Update employee Modal */}
                 <Modal show={this.state.addEmpModal.show} fullscreen={true} onHide={() => this.handleModal()}>
                     <div className="container py-5">
                         <Card className="border border-info">
                             <Modal.Header closeButton className="bg-info">
                                 <Modal.Title>
-                                {this.state.isUpdate
-                                ? "Update Employee Form"
-                                : "Add New Employee Form"}
+                                    {this.state.isUpdate
+                                        ? "Update Employee Form"
+                                        : "Add New Employee Form"}
                                 </Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
                                 {this.state.isUpdate
-                                ?   <ManageForm 
+                                    ? <ManageForm
                                         newEmp={this.state.editEmp}
                                         handleForm={this.handleForm}
                                         handleInput={this.handleInput}
                                     />
-                            : 
-                                <ManageForm 
-                                    newEmp={this.state.newEmp}
-                                    handleForm={this.handleForm}
-                                    handleInput={this.handleInput}
-                                />
-                            }
+                                    :
+                                    <ManageForm
+                                        newEmp={this.state.newEmp}
+                                        handleForm={this.handleForm}
+                                        handleInput={this.handleInput}
+                                    />
+                                }
                             </Modal.Body>
                         </Card>
                     </div>
